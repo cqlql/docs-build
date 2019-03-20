@@ -18,9 +18,9 @@ export class AjaxGeneral {
     let { $loading: loading, $toast: toast } = Vue.prototype
     let { hasLoading = true } = config
     if (hasLoading) loading.show()
-    if (process.env.NODE_ENV !== 'production') {
-      config.baseURL = require('@/dev.config.js').default.baseURL
-    }
+    // if (process.env.NODE_ENV !== 'production') {
+    //   config.baseURL = require('@/dev.config.js').default.baseURL
+    // }
     config.timeout = 60000
     return axios(config).then(({ data }) => {
       const result = this.dataHandle(data)
@@ -50,11 +50,11 @@ export class AjaxGeneral {
   }
 }
 
-export default new AjaxGeneral(function (data) {
-  if (data.code === 0) {
-    return data.data
-  }
-  return new Error(data.message)
-})
+// export const ajaxNet = new AjaxGeneral(function (data) {
+//   if (data.code === 0) {
+//     return data.data
+//   }
+//   return new Error(data.message)
+// })
 
-// export const ajaxGo = new AjaxGeneral()
+export default new AjaxGeneral()

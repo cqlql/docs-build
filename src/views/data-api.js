@@ -1,5 +1,6 @@
 import scriptLoad from '@/modules/corejs/dom/script-load'
 import Vue from 'vue'
+import axios from '@/modules/ajax-api/ajax.js'
 
 const windowCtrlKey = {
   bind () {
@@ -26,14 +27,15 @@ const windowCtrlKey = {
 
 const dataApi = {
   getMenu () {
-    return new Promise((resolve, reject) => {
-      Vue.loading.show()
-      window.cb_menu_data = function (data) {
-        Vue.loading.hide()
-        resolve(data)
-      }
-      scriptLoad('./data/menu_data.js')
-    })
+    // return new Promise((resolve, reject) => {
+    //   Vue.loading.show()
+    //   window.cb_menu_data = function (data) {
+    //     Vue.loading.hide()
+    //     resolve(data)
+    //   }
+    //   scriptLoad('./data/menu_data.js')
+    // })
+    return axios.get('/api/menu')
   },
   getArticle (name) {
     return new Promise((resolve, reject) => {

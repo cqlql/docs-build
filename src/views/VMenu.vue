@@ -131,17 +131,17 @@ export default {
   },
   render () {
     const { menuData, foldLevel, selectedIndex } = this
-    const rootName = menuData.name
+    let index = 0
     function build (children = []) {
       const list = []
       children.forEach(item => {
-        let { index, level, children, name, url } = item
+        let { level, children, name, path, isFile } = item
         const childList = build(children)
         list.push(
-          <div class={['menu-item', level < foldLevel ? '' : 'fold']} key={rootName + index} data-index={index} data-level={level}>
-            <div class={['item', index === selectedIndex && 'selected']}>
+          <div class={['menu-item', level < foldLevel ? '' : 'fold']} key={path} data-index={index} data-level={level}>
+            <div class={['item', index++ === selectedIndex && 'selected']}>
               <i class={children.length === 0 ? 'hidden' : ''}></i>
-              <span class={['txt', url ? 'url' : '']} domPropsInnerHTML={name}></span>
+              <span class={['txt', isFile ? 'url' : '']} domPropsInnerHTML={name}></span>
             </div>
             <div class="list">{childList}</div>
           </div >
@@ -329,6 +329,7 @@ export default {
   height: 26px;
   background: transparent;
   position: relative;
+  user-select:none
 }
 
 .menu .item i:after {

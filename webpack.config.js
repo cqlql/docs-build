@@ -9,11 +9,11 @@ const conf = {
   devServer: {
     // proxy 文档：https://github.com/chimurai/http-proxy-middleware
     proxy: [{
-      context: ['/mock'],
+      context: ['/api'],
       target: `http://${require('./build/get-ip-adress')()}:3003`,
-      pathRewrite: {
-        '^/mock': ''
-      },
+      // pathRewrite: {
+      //   '^/mock': ''
+      // },
 
       // 注意以下的自定义无法在浏览器端看到，因为是通过nodejs去请求的，而不是浏览器。所以只能在服务端看到
 
