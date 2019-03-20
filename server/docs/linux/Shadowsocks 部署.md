@@ -75,13 +75,32 @@ WantedBy=multi-user.target
 
 启动
 
-```
+``` bash
+# 激活
 systemctl enable shadowsocks
+# 启动
 systemctl start shadowsocks
 ```
 
 查看状态
 
-```
+```bash
+# 能看到部分日志
 systemctl status shadowsocks -l
+```
+
+查看所有日志  
+通过 journalctl + 进程id 查询 方式查询  
+贴上一篇文章：[如何使用Journalctl查看并操作Systemd日志](https://blog.csdn.net/zstack_org/article/details/56274966)
+
+```bash
+# 搜索 ssserver 进程id
+ps -aux | grep ssserver
+
+# 查看 id 为 21779，今天的日志
+journalctl _PID=21779 --since today
+# 昨天
+journalctl _PID=21779 --since yesterday
+# 最近50条
+journalctl _PID=21779 -n 50
 ```

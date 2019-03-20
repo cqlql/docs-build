@@ -37,7 +37,7 @@ class BuildMenuData {
       let filePath = this.docsRootPath + dir
       if (fs.statSync(filePath).isDirectory()) {
         data.isFile = false
-        this.buildData(dir, data.children, level)
+        await this.buildData(dir, data.children, level)
       } else {
         // 生成搜索索引数据
         let data = await fsPromises.readFile(filePath, 'utf8')
