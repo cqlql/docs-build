@@ -2,7 +2,7 @@
   <div>
     <div :class="$style.header">
       <div :class="$style.searchBox">
-        <VSearch />
+        <VSearch @select="searchSelect" />
       </div>
       <h1>API 接口文档</h1>
       <!-- <div :class="$style.des">
@@ -12,7 +12,7 @@
       </div> -->
     </div>
     <DragView :class="$style.left" :initial-width="200" :max-width="400" @resize="onResize" :style="{top:top+'px'}">
-      <VMenu :menu-data="menuData" @select="menuSelect" />
+      <VMenu ref="vMenu" :menu-data="menuData" @select="menuSelect" />
     </DragView>
     <div :class="$style.right" :style="{'margin-left':rightX+'px'}">
       <vArticle :content="articleContent" ref="vArticle" @select="onArticleSelect" />
@@ -80,6 +80,13 @@ export default {
     },
     async menuSelect (path) {
       this.articleContent = await dataApi.getArticle(path)
+    },
+    searchSelect (path) {
+      let vMenu = this.$refs.vMenu
+      let index = document.getElementById(path).dataset.index * 1
+      vMenu.select(index)
+      vMenu.unfold(index)
+      this.menuSelect(path)
     }
   }
 }

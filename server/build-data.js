@@ -1,3 +1,4 @@
+const marked = require('marked')
 const path = require('path')
 const fs = require('fs')
 const sqlite3 = require('sqlite3').verbose()
@@ -27,6 +28,7 @@ class BuildMenuData {
       // let url = prevUrl + '\\' + encodeURIComponent(fullName)
       let name = fullName.replace(/\.md$/, '')
       let data = {
+        index: this.index++,
         name,
         path: dir,
         level,
@@ -41,6 +43,7 @@ class BuildMenuData {
       } else {
         // 生成搜索索引数据
         let data = await fsPromises.readFile(filePath, 'utf8')
+        data = this.clearMarkdown(data)
         await this.addIndexData(name, dir, data)
       }
     }
@@ -64,7 +67,7 @@ class BuildMenuData {
       content TEXT
     );
     `)
-
+    this.index = 0
     await this.buildData()
     await fsPromises.writeFile(this.dataRootPath + '\\' + 'menu.json', JSON.stringify(this.data))
   }
@@ -95,6 +98,15 @@ class BuildMenuData {
         else resolve(res)
       })
     })
+  }
+  clearMarkdown (cont) {
+    let tokens = marked.lexer(cont)
+    let newCont = ''
+    tokens.forEach(d => {
+      let { text } = d
+      if (text) newCont += text + '\r\n'
+    })
+    return newCont
   }
 }
 

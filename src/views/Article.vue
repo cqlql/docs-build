@@ -15,6 +15,8 @@ export default {
   },
   computed: {
     htmlCont () {
+      // const tokens = marked.lexer(this.content);
+      // console.log(tokens)
       return marked(this.content)
     }
   },

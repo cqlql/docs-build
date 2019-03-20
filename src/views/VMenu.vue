@@ -109,10 +109,12 @@ export default {
       const end = this.$el
       const items = this.getItems()
       let item = items[index]
-      while ((item = item.parentElement)) {
-        if (item === end) break
+      while (1) {
+        // if (item === end) break
         let { classList } = item
         classList.remove('fold')
+        item = item.parentElement
+        if (item === end) break
       }
     },
     scrollTo (index) {
@@ -133,15 +135,14 @@ export default {
   },
   render () {
     const { menuData, foldLevel, selectedIndex } = this
-    let index = 0
     function build (children = []) {
       const list = []
       children.forEach(item => {
-        let { level, children, name, path, isFile } = item
+        let { level, children, name, path, isFile, index } = item
         const childList = build(children)
         list.push(
           <div class={['menu-item', level < foldLevel ? '' : 'fold', isFile ? 'is-file' : '']} key={index} id={path} data-index={index} data-level={level}>
-            <div class={['item', index++ === selectedIndex && 'selected']}>
+            <div class={['item', index === selectedIndex && 'selected']}>
               <i class={children.length === 0 ? 'hidden' : ''}></i>
               <span class="txt" domPropsInnerHTML={name}></span>
             </div>

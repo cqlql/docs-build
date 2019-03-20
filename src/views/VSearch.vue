@@ -1,10 +1,12 @@
 <template>
   <div :class="$style.search">
-    <input type="text" v-model="wd">
-    <div :class="$style.result">
-      <dl v-for="item of searchResult">
-        <dt>{{item.name}}</dt>
-        <dd></dd>
+    <input v-model="wd" type="text">
+    <div :class="$style.result" >
+      <dl v-for="item of searchResult" :key="item.id" @click="$emit('select', item.path)">
+        <dt>{{ item.name }}</dt>
+        <dd>
+          <pre v-html="item.content" />
+        </dd>
       </dl>
     </div>
   </div>
@@ -24,11 +26,27 @@ export default {
       if (this.isLoading) return
       this.isLoading = true
       try {
-        this.searchResult = await dataApi.search(wd)
+        let searchResult = await dataApi.search(wd)
+        searchResult.forEach(d => {
+          d.content = this.capture(d.path, d.content)
+        })
+        this.searchResult = searchResult
       } catch (err) {
         console.error(err)
       }
       this.isLoading = false
+    }
+  },
+  methods: {
+    capture (path, content) {
+      let reg = new RegExp(`(.{0,20})(${this.wd})(.{0,20})`, 'i')
+      let res = path.match(reg)
+      // console.log('path', res)
+      if (!res) {
+        res = content.match(reg)
+      }
+      // console.log('content', res, content)
+      return `${res[1]}<b>${res[2]}</b>${res[3]}`
     }
   }
 }
