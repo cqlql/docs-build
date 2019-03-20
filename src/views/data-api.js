@@ -1,10 +1,11 @@
 // import scriptLoad from '@/modules/corejs/dom/script-load'
 // import Vue from 'vue'
-import axios from '@/modules/ajax-api/ajax.js'
+// import axios from '@/modules/ajax-api/ajax.js'
+import axios, { AjaxGeneral } from '@/modules/ajax-api/ajax.js'
 
-// const axiosDocs = new AjaxGeneral(function (data) {
-//   return data
-// })
+const axiosDocs = new AjaxGeneral(function (data) {
+  return data
+})
 const windowCtrlKey = {
   bind () {
     this.fn = (e) => {
@@ -29,15 +30,23 @@ const windowCtrlKey = {
 }
 
 const dataApi = {
+  urlPathParamsHandle (path) {
+    let names = path.split('\\')
+    let newNames = []
+    names.forEach(name => {
+      newNames.push(encodeURIComponent(name))
+    })
+    return newNames.join('/')
+  },
   getMenu () {
     return axios.get('/api/menu')
   },
-  // getArticle (path) {
-  //   return axiosDocs.get('/docs' + path)
-  // },
   getArticle (path) {
-    return axios.get('/api/docs?path=' + encodeURIComponent(path))
+    return axiosDocs.get('/docs' + this.urlPathParamsHandle(path))
   },
+  // getArticle (path) {
+  //   return axios.get('/api/docs?path=' + encodeURIComponent(path))
+  // },
   search (wd) {
     return axios.get('/api/search?wd=' + encodeURIComponent(wd))
   },
