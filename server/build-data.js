@@ -21,10 +21,11 @@ class BuildMenuData {
     level++
     let names = await fsPromises.readdir(this.docsRootPath + prevDir)
     for (let i = 0, len = names.length; i < len; i++) {
-      let name = names[i]
-      if (this.ignore && this.ignore.test(name)) continue
-      let dir = prevDir + '\\' + name
-      name = name.replace(/\.md$/, '')
+      let fullName = names[i]
+      if (this.ignore && this.ignore.test(fullName)) continue
+      let dir = prevDir + '\\' + fullName
+      // let url = prevUrl + '\\' + encodeURIComponent(fullName)
+      let name = fullName.replace(/\.md$/, '')
       let data = {
         name,
         path: dir,

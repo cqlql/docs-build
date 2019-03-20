@@ -9,7 +9,7 @@ const conf = {
   devServer: {
     // proxy 文档：https://github.com/chimurai/http-proxy-middleware
     proxy: [{
-      context: ['/api'],
+      context: ['/api', '/docs'],
       target: `http://${require('./build/get-ip-adress')()}:3003`,
       // pathRewrite: {
       //   '^/mock': ''

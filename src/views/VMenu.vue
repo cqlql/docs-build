@@ -46,7 +46,7 @@ export default {
         let { classList } = elem
         if (classList.contains('menu-item')) {
           if (dataApi.ctrlKeyDown) {
-            window.open(`${location.origin + location.pathname}#/${this.$route.params.type}/${elem.dataset.index}`)
+            // window.open(`${location.origin + location.pathname}#/${this.$route.params.type}/${elem.dataset.index}`)
             return false
           }
           if (eArrows) {
@@ -61,7 +61,9 @@ export default {
           let index = elem.dataset.index * 1
           if (index !== this.selectedIndex) {
             this.select(index)
-            this.$emit('select', index)
+            if (classList.contains('is-file')) {
+              this.$emit('select', elem.id)
+            }
           }
           return false
         }
@@ -138,10 +140,10 @@ export default {
         let { level, children, name, path, isFile } = item
         const childList = build(children)
         list.push(
-          <div class={['menu-item', level < foldLevel ? '' : 'fold']} key={path} data-index={index} data-level={level}>
+          <div class={['menu-item', level < foldLevel ? '' : 'fold', isFile ? 'is-file' : '']} key={index} id={path} data-index={index} data-level={level}>
             <div class={['item', index++ === selectedIndex && 'selected']}>
               <i class={children.length === 0 ? 'hidden' : ''}></i>
-              <span class={['txt', isFile ? 'url' : '']} domPropsInnerHTML={name}></span>
+              <span class="txt" domPropsInnerHTML={name}></span>
             </div>
             <div class="list">{childList}</div>
           </div >
@@ -252,7 +254,7 @@ export default {
 .menu .item .txt {
   position: relative;
 }
-.menu .item .txt.url {
+.menu .is-file .txt {
   /* text-decoration: underline; */
   color: #0085ff;
 }

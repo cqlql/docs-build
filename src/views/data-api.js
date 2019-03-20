@@ -1,7 +1,10 @@
-import scriptLoad from '@/modules/corejs/dom/script-load'
-import Vue from 'vue'
+// import scriptLoad from '@/modules/corejs/dom/script-load'
+// import Vue from 'vue'
 import axios from '@/modules/ajax-api/ajax.js'
 
+// const axiosDocs = new AjaxGeneral(function (data) {
+//   return data
+// })
 const windowCtrlKey = {
   bind () {
     this.fn = (e) => {
@@ -27,25 +30,16 @@ const windowCtrlKey = {
 
 const dataApi = {
   getMenu () {
-    // return new Promise((resolve, reject) => {
-    //   Vue.loading.show()
-    //   window.cb_menu_data = function (data) {
-    //     Vue.loading.hide()
-    //     resolve(data)
-    //   }
-    //   scriptLoad('./data/menu_data.js')
-    // })
     return axios.get('/api/menu')
   },
-  getArticle (name) {
-    return new Promise((resolve, reject) => {
-      Vue.loading.show()
-      window[`cb_${name}`] = function (data) {
-        Vue.loading.hide()
-        resolve(data)
-      }
-      scriptLoad(`./data/${encodeURIComponent(name)}.js`)
-    })
+  // getArticle (path) {
+  //   return axiosDocs.get('/docs' + path)
+  // },
+  getArticle (path) {
+    return axios.get('/api/docs?path=' + encodeURIComponent(path))
+  },
+  search (wd) {
+    return axios.get('/api/search?wd=' + encodeURIComponent(wd))
   },
   ctrlKeyBind: windowCtrlKey.bind,
   ctrlKeyUnbind: windowCtrlKey.unbind
