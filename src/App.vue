@@ -81,7 +81,6 @@ export default {
     },
     async menuSelect (path) {
       this.articleContent = await dataApi.getArticle(path)
-      console.log(path)
     }
   }
 }
