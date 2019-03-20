@@ -67,7 +67,6 @@ export default {
       }
     }
     this.windowScroll.bind(top => {
-      console.log(123)
       this.top = top
     })
   },
