@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="$style.search">
     <input type="text" v-model="wd">
     <div :class="$style.result">
       <dl v-for="item of searchResult">
@@ -35,9 +35,20 @@ export default {
 </script>
 
 <style module>
+.search {
+  padding: 20px;
+
+}
 .result {
   background-color: #fff;
   position: relative;
   z-index: 3;
+  dl {
+    border-bottom: 2px solid blue;
+    padding: 6px 0;
+  }
+  dt {
+    padding: 0 6px;
+  }
 }
 </style>

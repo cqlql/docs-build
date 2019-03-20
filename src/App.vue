@@ -27,20 +27,6 @@ import VMenu from '@/views/VMenu.vue'
 import VArticle from '@/views/Article.vue'
 import VSearch from '@/views/VSearch.vue'
 
-const windowScroll = {
-  bind (cb) {
-    this.scroll = function () {
-      let y = 70 - window.pageYOffset
-      y = y < 0 ? 0 : y
-      cb(y)
-    }
-    window.addEventListener('scroll', this.scroll)
-  },
-  unbind () {
-    window.removeEventListener('scroll', this.scroll)
-  }
-}
-
 export default {
   components: {
     VMenu,
@@ -127,11 +113,16 @@ export default {
   h1 {
     color: #fff;
     margin: 0;
+    /* margin-left: -100px; */
     padding: 10px 0 6px 20px;
     font-size: 24px;
     font-weight: bold;
-    /* float: left; */
-        text-align: center;
+    
+    text-align: center;
+    float: left;
+    /* text-indent: -50px; */
+    /* position: relative;
+    left: -20px; */
   }
   .des {
     padding: 0 0 0 20px;
