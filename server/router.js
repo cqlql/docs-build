@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const BuildMenuData = require('./build-menu-data.js')
-// const buildMenuData = new BuildMenuData()
+const BuildData = require('./build-data.js')
+const buildData = new BuildData()
 
 // 文件上传
 // var multer = require('multer')
@@ -18,18 +18,24 @@ const BuildMenuData = require('./build-menu-data.js')
 // router.post('/Organization/GetDepartments', function (req, res) {
 //   res.send(require('./data/GetDepartments.json'))
 // })
-// // get
-// router.get('/Power/GetClassesInGrades', function (req, res) {
-//   // console.log(req.query)
-//   // console.log(req.body)
-//   res.send(require('./data/GetClassesInGrades.json')[req.query.PeriodId])
-// })
-router.get('/api/build-menu', function (req, res) {
-  (new BuildMenuData()).build()
+
+// http://192.168.1.222:3003/api/search?kw=cmd%20%E5%91%BD%E4%BB%A4%E8%A1%8C
+router.get('/api/search', async function (req, res) {
+  let kw = req.query.kw || ''
+  // kw = kw.replace(/%|_/g, ' ')
+  let d = await buildData.dbAll(`SELECT id, path, content FROM articles WHERE path LIKE '%${kw}%' OR content LIKE '%${kw}%' LIMIT 20;`)
+  res.send({
+    status: 200,
+    result: d,
+    message: ''
+  })
+})
+router.get('/api/build', async function (req, res) {
+  await buildData.build()
   res.send({
     status: 200,
     result: '',
-    message: '左侧菜单生成成功'
+    message: '数据生成成功'
   })
 })
 router.get('/api/menu', function (req, res) {
