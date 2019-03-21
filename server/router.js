@@ -1,9 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const BuildData = require('./build-data.js')
-const path = require('path')
-const fs = require('fs')
-const fsPromises = fs.promises
+// const path = require('path')
+// const fs = require('fs')
+// const fsPromises = fs.promises
 const buildData = new BuildData()
 
 // 文件上传
@@ -53,13 +53,13 @@ router.get('/api/menu', function (req, res) {
   })
 })
 
-router.get('/api/docs', async function (req, res) {
-  let cont = await fsPromises.readFile(path.resolve(__dirname, 'docs' + req.query.path), 'utf8')
+// router.get('/api/docs', async function (req, res) {
+//   let cont = await fsPromises.readFile(path.resolve(__dirname, 'docs' + req.query.path), 'utf8')
 
-  res.send({
-    status: 200,
-    result: cont
-  })
-})
+//   res.send({
+//     status: 200,
+//     result: cont
+//   })
+// })
 
 module.exports = router

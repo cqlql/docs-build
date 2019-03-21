@@ -1,17 +1,18 @@
 const marked = require('marked')
-const path = require('path')
+// const path = require('path')
 const fs = require('fs')
 const sqlite3 = require('sqlite3').verbose()
 const fsPromises = fs.promises
+const config = require('./config.js')
 
 class BuildMenuData {
   constructor () {
-    this.dataRootPath = path.resolve(__dirname, 'data')
-    this.docsRootPath = path.resolve(__dirname, 'docs')
+    this.dataRootPath = config.dataPath
+    this.docsRootPath = config.docsPath
 
     // 排除文件或者目录
     // this.ignore = /\.editorconfig/
-    this.ignore = false
+    this.ignore = config.ignore
 
     this.data = {
       children: []
