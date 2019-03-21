@@ -10,7 +10,7 @@ const conf = {
     // proxy 文档：https://github.com/chimurai/http-proxy-middleware
     proxy: [{
       context: ['/api', '/docs'],
-      target: `http://${require('./build/get-ip-adress')()}:3003`,
+      target: `http://${require('./build/get-ip-adress')()}:1003`,
       // pathRewrite: {
       //   '^/mock': ''
       // },
