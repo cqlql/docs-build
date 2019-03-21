@@ -1,19 +1,23 @@
 <template>
   <div :class="[$style.leftBox,s.leftBox]" :style="{width:width+'px'}">
-    <slot/>
-    <div :class="[$style.bar, s.bar]" ref="eBar"></div>
+    <slot />
+    <div ref="eBar" :class="[$style.bar, s.bar]"/>
   </div>
 </template>
 
 <script>
 import drag from '@/modules/corejs/dom-drag/drag-plus.js'
 export default {
+  model: {
+    prop: 'width',
+    event: 'resize'
+  },
   props: {
     s: {
       type: Object,
       default () { return {} }
     },
-    initialWidth: {
+    width: {
       type: Number,
       default: 210
     },
@@ -27,11 +31,11 @@ export default {
     },
     classBar: String
   },
-  data () {
-    return {
-      width: this.initialWidth
-    }
-  },
+  // data () {
+  //   return {
+  //     width: this.initialWidth
+  //   }
+  // },
   created () {
     this.x = this.width
   },
@@ -49,16 +53,16 @@ export default {
         tw = this.width
         e.preventDefault()
       },
-      onMove: ({lx}) => {
+      onMove: ({ lx }) => {
         len += lx
         let width = tw + len
-        let {maxWidth, minWidth} = this
+        let { maxWidth, minWidth } = this
         if (width < minWidth) {
           width = minWidth
         } else if (width > maxWidth) {
           width = maxWidth
         }
-        this.width = width
+        // this.width = width
         this.$emit('resize', width)
       }
     })

@@ -1,21 +1,25 @@
 <template>
   <div>
-    <div :class="$style.header">
+<!-- <DragView :class="$style.left" v-model="menuWidth" :max-width="400" @resize="onResize" :style="{top:top+'px'}"> -->
+    <DragView v-model="menuWidth" :class="$style.left" :max-width="500" @resize="onResize">
+      <div :class="$style.header">
+        <!-- <div :class="$style.searchBox">
+          <VSearch @select="searchSelect" />
+        </div> -->
+        <h1>API 接口文档</h1>
+        <!-- <div :class="$style.des">
+          技术笔记，速查手册，效果汇总
+          <span :class="$style.sp">|</span>
+          <a href="http://cqlql.github.io">关于</a>
+        </div> -->
+      </div>
       <div :class="$style.searchBox">
         <VSearch @select="searchSelect" />
       </div>
-      <h1>API 接口文档</h1>
-      <!-- <div :class="$style.des">
-        技术笔记，速查手册，效果汇总
-        <span :class="$style.sp">|</span>
-        <a href="http://cqlql.github.io">关于</a>
-      </div> -->
-    </div>
-    <DragView :class="$style.left" :initial-width="200" :max-width="400" @resize="onResize" :style="{top:top+'px'}">
       <VMenu ref="vMenu" :menu-data="menuData" @select="menuSelect" />
     </DragView>
     <div :class="$style.right" :style="{'margin-left':rightX+'px'}">
-      <vArticle :content="articleContent" ref="vArticle" @select="onArticleSelect" />
+      <vArticle ref="vArticle" :content="articleContent" @select="onArticleSelect" />
     </div>
   </div>
 </template>
@@ -36,49 +40,58 @@ export default {
   },
   data () {
     return {
-      top: 70,
+      // top: 60,
       menuList: [],
       articleContent: '',
       articleOutline: {},
 
       // 窗口大小
-      // middleX: 200,
-      // middleW: 200,
-      rightX: 210,
+      menuWidth: (localStorage.getItem('leftMenuWidth') || 260) * 1,
+      // menuInitWidth: (localStorage.getItem('leftMenuWidth') || 260) * 1,
+      rightX: (localStorage.getItem('rightContX') || 270) * 1,
 
       menuData: {}
     }
   },
-  async created () {
+  // async created () {
+  //   this.menuData = await dataApi.getMenu()
+  // },
+  async mounted () {
+    // this.windowScroll = {
+    //   bind (cb) {
+    //     this.scroll = function () {
+    //       let y = 60 - window.pageYOffset
+    //       y = y < 0 ? 0 : y
+    //       cb(y)
+    //     }
+    //     window.addEventListener('scroll', this.scroll)
+    //   },
+    //   unbind () {
+    //     window.removeEventListener('scroll', this.scroll)
+    //   }
+    // }
+    // this.windowScroll.bind(top => {
+    //   this.top = top
+    // })
+
     this.menuData = await dataApi.getMenu()
+    let path = location.hash.substr(1)
+    await this.$nextTick()
+    if (path) this.searchSelect(decodeURI(path))
   },
-  mounted () {
-    this.windowScroll = {
-      bind (cb) {
-        this.scroll = function () {
-          let y = 70 - window.pageYOffset
-          y = y < 0 ? 0 : y
-          cb(y)
-        }
-        window.addEventListener('scroll', this.scroll)
-      },
-      unbind () {
-        window.removeEventListener('scroll', this.scroll)
-      }
-    }
-    this.windowScroll.bind(top => {
-      this.top = top
-    })
-  },
-  destroyed () {
-    this.windowScroll.unbind()
-  },
+  // destroyed () {
+  //   this.windowScroll.unbind()
+  // },
   methods: {
     onArticleSelect () {},
     onResize (x) {
-      this.rightX = x + 10
+      let rightX = this.rightX = x + 10
+      localStorage.setItem('leftMenuWidth', x)
+      localStorage.setItem('rightContX', rightX)
     },
     async menuSelect (path) {
+      // path = dataApi.urlPathParamsHandle(path)
+      location.hash = path
       this.articleContent = await dataApi.getArticle(path)
     },
     searchSelect (path) {
@@ -96,7 +109,8 @@ export default {
   position: fixed;
   width: 200px;
   left: 0;
-  top: 70px;
+  /* top: 60px; */
+  top: 0;
   bottom: 0;
   z-index: 2;
 }
@@ -104,25 +118,28 @@ export default {
   position: fixed;
   width: 200px;
   left: 200px;
-  top: 70px;
+  top: 60px;
   bottom: 0;
 }
 .right {
+  margin-top: 20px;
   margin-left: 410px;
   margin-right: 10px;
 }
 
 .header {
-  height: 70px;
+  /* position: absolute;
+  top: 0; */
+  height: 60px;
   background-color: #24292e;
   h1 {
     color: #fff;
     margin: 0;
     /* margin-left: -100px; */
     padding: 10px 0 6px 20px;
-    font-size: 24px;
+    font-size: 30px;
     font-weight: bold;
-    
+
     text-align: center;
     float: left;
     /* text-indent: -50px; */
@@ -141,6 +158,7 @@ export default {
   }
 }
 .searchBox {
-  float: left;
+  /* float: left; */
+      border-right: 1px solid #efefef;
 }
 </style>

@@ -1,6 +1,7 @@
 <template>
   <div :class="$style.article">
-    <div class="markdown-body" v-html="htmlCont" @click="onSelect"></div>
+    <!-- <div class="markdown-body" v-html="htmlCont" @click="onSelect"></div> -->
+    <div class="markdown-body" v-html="htmlCont" />
   </div>
 </template>
 
@@ -24,29 +25,29 @@ export default {
     this.hxSelect = new DomSelect()
     this.articleSelect = new DomSelect()
   },
-  mounted () {
-    // 文章定位优化
-    this.$el.children[0].style.paddingBottom = innerHeight / 2 + 'px'
-  },
-  methods: {
-    onSelect ({ target }) {
-      if (/H\d/.test(target.tagName)) {
-        this.highlight(target)
-        this.$emit('select', target.dataset.index * 1)
-      }
-    },
-    highlight (hx) {
-      this.hxSelect.select(hx)
-      this.articleSelect.select(hx.parentElement)
-    },
-    select (index) {
-      this.$nextTick(() => {
-        const hx = this.hxs[index]
-        window.scrollTo(0, hx.offsetTop - 10)
-        this.highlight(hx)
-      })
-    }
-  },
+  // mounted () {
+  //   // 文章定位优化
+  //   this.$el.children[0].style.paddingBottom = innerHeight / 2 + 'px'
+  // },
+  // methods: {
+  //   onSelect ({ target }) {
+  //     if (/H\d/.test(target.tagName)) {
+  //       this.highlight(target)
+  //       this.$emit('select', target.dataset.index * 1)
+  //     }
+  //   },
+  //   highlight (hx) {
+  //     this.hxSelect.select(hx)
+  //     this.articleSelect.select(hx.parentElement)
+  //   },
+  //   select (index) {
+  //     this.$nextTick(() => {
+  //       const hx = this.hxs[index]
+  //       window.scrollTo(0, hx.offsetTop - 10)
+  //       this.highlight(hx)
+  //     })
+  //   }
+  // },
   // watch: {
   //   content () {
   //     this.$nextTick(() => {

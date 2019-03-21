@@ -1,7 +1,7 @@
 
 <script>
 import scopeElements from '@/modules/corejs/dom/scope-elements.js'
-import relativexy from '@/modules/corejs/dom/relative.js'
+// import relativexy from '@/modules/corejs/dom/relative.js'
 import dataApi from './data-api.js'
 export default {
   props: {
@@ -46,7 +46,7 @@ export default {
         let { classList } = elem
         if (classList.contains('menu-item')) {
           if (dataApi.ctrlKeyDown) {
-            // window.open(`${location.origin + location.pathname}#/${this.$route.params.type}/${elem.dataset.index}`)
+            window.open(`${location.origin + location.pathname}#/${elem.id}`)
             return false
           }
           if (eArrows) {
@@ -82,7 +82,7 @@ export default {
     },
     onFoldLevel ({ target }) {
       if (target.tagName === 'A') {
-        let foldLevel = target.innerHTML * 1
+        let foldLevel = target.innerHTML * 1 + 1
         if (foldLevel === this.foldLevel) {
           // 不触发更新情况手动折叠
           const excu = child => {
@@ -117,21 +117,21 @@ export default {
         if (item === end) break
       }
     },
-    scrollTo (index) {
-      this.select(index)
-      this.unfold(index)
-      setTimeout(() => {
-        const { eMenuList } = this
-        const item = this.getItems()[index]
-        eMenuList.scrollTop = relativexy(item, eMenuList).y - eMenuList.clientHeight / 2 + 13
-      }, 1)
-      // this.$nextTick(() => {
-      //   const {eMenuList} = this
-      //   const item = this.getItems()[index]
-      //   console.log(relativexy(item, eMenuList).y, eMenuList, eMenuList.clientHeight)
-      //   eMenuList.scrollTop = relativexy(item, eMenuList).y - eMenuList.clientHeight / 2 + 13
-      // })
-    }
+    // scrollTo (index) {
+    //   this.select(index)
+    //   this.unfold(index)
+    //   setTimeout(() => {
+    //     const { eMenuList } = this
+    //     const item = this.getItems()[index]
+    //     eMenuList.scrollTop = relativexy(item, eMenuList).y - eMenuList.clientHeight / 2 + 13
+    //   }, 1)
+    //   // this.$nextTick(() => {
+    //   //   const {eMenuList} = this
+    //   //   const item = this.getItems()[index]
+    //   //   console.log(relativexy(item, eMenuList).y, eMenuList, eMenuList.clientHeight)
+    //   //   eMenuList.scrollTop = relativexy(item, eMenuList).y - eMenuList.clientHeight / 2 + 13
+    //   // })
+    // }
   },
   render () {
     const { menuData, foldLevel, selectedIndex } = this
@@ -159,10 +159,10 @@ export default {
       <div class="menu">
         <div class="menu-tool">
           <div class="op" onClick={this.onFoldLevel}>
-            <a href="javascript:;" class="level">1</a>
-            <a href="javascript:;" class="level">2</a>
-            <a href="javascript:;" class="level">3</a>
-            <a href="javascript:;" class="level">4</a>
+            <a href="javascript:;" class="level" title="折叠所有">0</a>
+            <a href="javascript:;" class="level" title="展开1级">1</a>
+            <a href="javascript:;" class="level" title="展开2级">2</a>
+            <a href="javascript:;" class="level" title="展开3级">3</a>
           </div>
         </div>
         <div class="menu-list" onClick={this.onFold} onDblclick={this.onDbFold}>{menuList}</div>
@@ -204,6 +204,8 @@ export default {
   height: 20px;
   font-size: 16px;
   line-height: 1.2;
+  color: inherit;
+  text-decoration: none;
 }
 
 .menu .menu-tool a:hover {
@@ -281,7 +283,7 @@ export default {
   background-color: #ffc;
 }
 
-.menu .item .op a {
+/* .menu .item .op a {
   float: left;
   width: 20px;
   text-align: center;
@@ -320,7 +322,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   content: "\E61A";
   font-size: 18px;
-}
+} */
 
 .menu .list {
   padding-left: 16px;
