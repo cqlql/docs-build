@@ -22,7 +22,8 @@ const indexPath = path.resolve(__dirname, 'public/index.html')
 const indexCont = fs.readFileSync(indexPath, 'utf8')
 fs.writeFileSync(indexPath, indexCont.replace(/(window\.routerRoot[\s]*=[\s]*).+/, '$1"' + routerRoot + '";'))
 
-app.use(routerRoot + '/', express.static(indexPath))
+app.use(routerRoot + '/', express.static(path.resolve(__dirname, 'public')))
+
 
 const server = app.listen(port, '0.0.0.0', function () {
   const host = server.address().address
