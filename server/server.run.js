@@ -1,4 +1,5 @@
 const path = require('path')
+const fs = require('fs')
 const getIPAdress = require('../build/get-ip-adress')
 const express = require('express')
 const router = require('./router')
@@ -15,8 +16,13 @@ app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-
 app.use(routerRoot + '/docs', express.static(path.resolve(__dirname, 'docs'))) // 文档文件
 
 app.use(routerRoot + '/', router)
+
+// 将配置写入 index.html
+const indexPath = path.resolve(__dirname, 'public/index.html')
+const indexCont = fs.readFileSync(indexPath, 'utf8')
+fs.writeFileSync(indexPath, indexCont.replace(/(window\.routerRoot[\s]*=[\s]*).+/, '$1"' + routerRoot + '";'))
+
 const server = app.listen(port, getIPAdress(), function () {
   const host = server.address().address
-  // const port = server.address().port
   console.log('Example app listening at http://%s:%s', host, port)
 })

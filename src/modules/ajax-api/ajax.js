@@ -21,6 +21,7 @@ export class AjaxGeneral {
     // if (process.env.NODE_ENV !== 'production') {
     //   config.baseURL = require('@/dev.config.js').default.baseURL
     // }
+    config.baseURL = window.routerRoot
     config.timeout = 60000
     return axios(config).then(({ data }) => {
       const result = this.dataHandle(data)

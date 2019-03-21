@@ -1,11 +1,12 @@
 
+## 开始
+
 ```sh
 
 # 生成数据
 curl http://localhost:3003/api/build
 # 或者
 node docs-build/build-data-excu.js
-
 
 # 开启 node 服务，使用 pm2 守护进程
 pm2 start docs-build/server.run.js

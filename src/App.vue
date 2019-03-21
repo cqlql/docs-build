@@ -6,7 +6,7 @@
         <!-- <div :class="$style.searchBox">
           <VSearch @select="searchSelect" />
         </div> -->
-        <h1>API 接口文档</h1>
+        <h1>深度教育-文档中心</h1>
         <!-- <div :class="$style.des">
           技术笔记，速查手册，效果汇总
           <span :class="$style.sp">|</span>
@@ -136,12 +136,12 @@ export default {
     color: #fff;
     margin: 0;
     /* margin-left: -100px; */
-    padding: 10px 0 6px 20px;
-    font-size: 30px;
+    padding: 12px 0;
+    font-size: 24px;
     font-weight: bold;
 
     text-align: center;
-    float: left;
+    /* float: left; */
     /* text-indent: -50px; */
     /* position: relative;
     left: -20px; */
