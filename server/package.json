@@ -1,0 +1,16 @@
+{
+  "name": "md-docs-build",
+  "version": "0.1.0",
+  "description": "markdown 文档生成",
+  "author": "陈桥黎",
+  "private": true,
+  "scripts": {
+    "start": "node ./server.run.js",
+    "build": "node ./build-data-excu.js"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "marked": "^0.6.1",
+    "sqlite3": "^4.0.6"
+  }
+}

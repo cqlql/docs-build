@@ -2,6 +2,8 @@
 ## 开始
 
 ```sh
+# 安装依赖。项目根目录运行
+npm i
 
 # 生成数据
 curl http://localhost:3003/api/build

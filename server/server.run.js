@@ -1,6 +1,6 @@
 const path = require('path')
 const fs = require('fs')
-const getIPAdress = require('../build/get-ip-adress')
+// const getIPAdress = require('../build/get-ip-adress')
 const express = require('express')
 const router = require('./router')
 const config = require('./config')
@@ -22,7 +22,9 @@ const indexPath = path.resolve(__dirname, 'public/index.html')
 const indexCont = fs.readFileSync(indexPath, 'utf8')
 fs.writeFileSync(indexPath, indexCont.replace(/(window\.routerRoot[\s]*=[\s]*).+/, '$1"' + routerRoot + '";'))
 
-const server = app.listen(port, getIPAdress(), function () {
+app.use(routerRoot + '/', express.static(indexPath))
+
+const server = app.listen(port, '0.0.0.0', function () {
   const host = server.address().address
   console.log('Example app listening at http://%s:%s', host, port)
 })
