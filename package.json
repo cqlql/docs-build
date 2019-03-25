@@ -11,7 +11,8 @@
     "test": "karma start test/unit/karma.conf.js",
     "test-jest": "jest -c=test/jest.config.js",
     "test-node": "jest spec/.+[sS]pec\\.js$ --watch -c=test-node/jest.config.js",
-    "data-mock": "nodemon ./server/server.run.js"
+    "data-mock": "nodemon ./server/server.run.js",
+    "download": "node ./download/download.js"
   },
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
