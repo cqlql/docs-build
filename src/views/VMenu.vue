@@ -174,8 +174,8 @@ export default {
 
 <style scoped>
 .menu {
-  position: relative;
-  height: 100%;
+  /* position: relative;
+  height: 100%; */
   box-sizing: border-box;
   background-color: #fff;
   border-right: 1px solid #efefef;
@@ -228,7 +228,7 @@ export default {
 
 .menu .menu-list {
   position: absolute;
-  top: 26px;
+  top: 122px;
   width: 100%;
   bottom: 0;
   overflow: auto;

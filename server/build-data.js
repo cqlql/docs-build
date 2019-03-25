@@ -1,13 +1,14 @@
 const marked = require('marked')
 // const path = require('path')
-const fs = require('fs')
+const fs = require('fs-extra')
 const sqlite3 = require('sqlite3').verbose()
 const fsPromises = fs.promises
 const config = require('./config.js')
 
 class BuildMenuData {
   constructor () {
-    this.dataRootPath = config.dataPath
+    // this.dataRootPath = config.dataPath
+    fs.ensureDirSync(this.dataRootPath = config.dataPath) // 必须确保 data 目录存在
     this.docsRootPath = config.docsPath
 
     // 排除文件或者目录

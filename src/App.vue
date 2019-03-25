@@ -77,7 +77,7 @@ export default {
     this.menuData = await dataApi.getMenu()
     let path = location.hash.substr(1)
     await this.$nextTick()
-    if (path) this.searchSelect(decodeURI(path))
+    if (path) this.searchSelect(decodeURI(path) + '.md')
   },
   // destroyed () {
   //   this.windowScroll.unbind()
@@ -91,7 +91,8 @@ export default {
     },
     async menuSelect (path) {
       // path = dataApi.urlPathParamsHandle(path)
-      location.hash = path
+      // path = path.replace(/\.md$/, '')
+      location.hash = path.replace(/\.md$/, '')
       this.articleContent = await dataApi.getArticle(path)
     },
     searchSelect (path) {
