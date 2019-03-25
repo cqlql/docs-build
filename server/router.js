@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const BuildData = require('./build-data.js')
-// const path = require('path')
-// const fs = require('fs')
+const path = require('path')
+const fs = require('fs')
 // const fsPromises = fs.promises
 const buildData = new BuildData()
 
@@ -47,10 +47,43 @@ router.get('/api/build', async function (req, res) {
   })
 })
 router.get('/api/menu', function (req, res) {
-  res.send({
-    status: 200,
-    result: require('./data/menu.json')
+  fs.readFile(path.resolve(__dirname, './data/menu.json'), 'utf8', function (err, data) {
+    if (err) {
+      res.send({
+        status: 0,
+        result: err
+      })
+    } else {
+      res.send({
+        status: 200,
+        result: JSON.parse(data)
+      })
+    }
   })
+})
+
+// 临时功能，因为没有正式部署
+// 用来同步 http://192.168.1.252:1003 文档
+router.get('/api/sync', function (req, res) {
+  require('../download/download.js')(
+    // 'http://192.168.1.252:1003/'
+    'http://192.168.1.222:8080/', // 测试用
+    function (d, err) {
+      if (err) {
+        res.send({
+          status: 0,
+          result: '',
+          message: err
+        })
+      } else {
+        res.send({
+          status: 200,
+          result: '',
+          message: '文档下载成功'
+        })
+      }
+    }
+  )
 })
 
 // router.get('/api/docs', async function (req, res) {

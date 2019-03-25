@@ -24,7 +24,6 @@ fs.writeFileSync(indexPath, indexCont.replace(/(window\.routerRoot[\s]*=[\s]*).+
 
 app.use(routerRoot + '/', express.static(path.resolve(__dirname, 'public')))
 
-
 const server = app.listen(port, '0.0.0.0', function () {
   const host = server.address().address
   console.log('Example app listening at http://%s:%s', host, port)

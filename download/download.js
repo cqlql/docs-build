@@ -18,21 +18,30 @@ function load (url, callback) {
       callback(data)
     })
   }).on('error', err => {
+    callback(0, err)
     console.error(err)
   })
 }
 
-function downloads (origin) {
-  load(origin + '_sidebar.md', function (paths) {
+module.exports = function downloads (origin, cb) {
+  load(origin + '_sidebar.md', function (paths, err) {
+    if (err) return cb(0, err)
     paths = paths.match(/[^\x28]+\.md/g)
+    let total = paths.length
+    let count = 0
     paths.forEach(path => {
       let url = origin + encodeURI(path)
-      load(url, data => {
+      load(url, (data, err) => {
+        if (err) return cb(0, err)
         fs.outputFileSync(docsDir + '/' + path.replace(/\|/g, '_'), data)
+        count++
+        if (count >= total) {
+          cb()
+        }
       })
     })
   })
 }
 
 // downloads('http://192.168.1.252:1003/')
-downloads('http://192.168.1.222:8080/')
+// downloads('http://192.168.1.222:8080/')
