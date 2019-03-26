@@ -67,7 +67,7 @@ class BuildMenuData {
       content TEXT
     );
     `)
-    await this.dbRun(`CREATE INDEX article_index ON articles (path, content);`)
+    // await this.dbRun(`CREATE INDEX article_index ON articles (path, content);`)
 
     // 清空
     this.index = 0

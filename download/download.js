@@ -24,12 +24,14 @@ function load (url, callback) {
 }
 
 module.exports = function downloads (origin, cb) {
+  fs.removeSync(docsDir)
   load(origin + '_sidebar.md', function (paths, err) {
     if (err) return cb(0, err)
-    paths = paths.match(/[^\x28]+\.md/g)
+    paths = paths.match(/\x5D\x28.+?\.md/g)
     let total = paths.length
     let count = 0
     paths.forEach(path => {
+      path = path.substr(2)
       let url = origin + encodeURI(path)
       load(url, (data, err) => {
         if (err) return cb(0, err)
