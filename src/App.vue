@@ -99,7 +99,8 @@ export default {
       let vMenu = this.$refs.vMenu
       let index = document.getElementById(path).dataset.index * 1
       vMenu.select(index)
-      vMenu.unfold(index)
+      // vMenu.unfold(index)
+      vMenu.scrollTo(index)
       this.menuSelect(path)
     }
   }

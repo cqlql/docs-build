@@ -15,9 +15,7 @@ class BuildMenuData {
     // this.ignore = /\.editorconfig/
     this.ignore = config.ignore
 
-    this.data = {
-      children: []
-    }
+    this.data = { children: [] }
   }
 
   async buildData (prevDir = '', children = this.data.children, level = 0) {
@@ -69,7 +67,12 @@ class BuildMenuData {
       content TEXT
     );
     `)
+    await this.dbRun(`CREATE INDEX article_index ON articles (path, content);`)
+
+    // 清空
     this.index = 0
+    this.data = { children: [] }
+
     await this.buildData()
     await fsPromises.writeFile(this.dataRootPath + '\\' + 'menu.json', JSON.stringify(this.data))
   }

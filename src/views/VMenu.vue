@@ -1,7 +1,7 @@
 
 <script>
 import scopeElements from '@/modules/corejs/dom/scope-elements.js'
-// import relativexy from '@/modules/corejs/dom/relative.js'
+import relativexy from '@/modules/corejs/dom/relative.js'
 import dataApi from './data-api.js'
 export default {
   props: {
@@ -117,21 +117,21 @@ export default {
         if (item === end) break
       }
     },
-    // scrollTo (index) {
-    //   this.select(index)
-    //   this.unfold(index)
-    //   setTimeout(() => {
-    //     const { eMenuList } = this
-    //     const item = this.getItems()[index]
-    //     eMenuList.scrollTop = relativexy(item, eMenuList).y - eMenuList.clientHeight / 2 + 13
-    //   }, 1)
-    //   // this.$nextTick(() => {
-    //   //   const {eMenuList} = this
-    //   //   const item = this.getItems()[index]
-    //   //   console.log(relativexy(item, eMenuList).y, eMenuList, eMenuList.clientHeight)
-    //   //   eMenuList.scrollTop = relativexy(item, eMenuList).y - eMenuList.clientHeight / 2 + 13
-    //   // })
-    // }
+    scrollTo (index) {
+      this.select(index)
+      this.unfold(index)
+      setTimeout(() => {
+        const { eMenuList } = this
+        const item = this.getItems()[index]
+        eMenuList.scrollTop = relativexy(item, eMenuList).top - eMenuList.clientHeight / 2 + 13
+      }, 1)
+      // this.$nextTick(() => {
+      //   const {eMenuList} = this
+      //   const item = this.getItems()[index]
+      //   console.log(relativexy(item, eMenuList).y, eMenuList, eMenuList.clientHeight)
+      //   eMenuList.scrollTop = relativexy(item, eMenuList).y - eMenuList.clientHeight / 2 + 13
+      // })
+    }
   },
   render () {
     const { menuData, foldLevel, selectedIndex } = this
