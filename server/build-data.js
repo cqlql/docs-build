@@ -49,7 +49,7 @@ class BuildMenuData {
     }
   }
   addIndexData (name, path, content) {
-    this.dbRun(`
+    return this.dbRun(`
     INSERT INTO articles (name, path, content)
     VALUES (?, ?, ?);
     `, [name, path, content])
@@ -74,13 +74,22 @@ class BuildMenuData {
     this.data = { children: [] }
 
     await this.buildData()
+    this.dbClose()
     await fsPromises.writeFile(this.dataRootPath + '\\' + 'menu.json', JSON.stringify(this.data))
   }
   async dbOpen () {
-    if (!this.db) {
+    return new Promise((resolve, reject) => {
+      let dbPath = this.dataRootPath + '\\article.db'
+      this.db = new sqlite3.Database(dbPath, err => {
+        if (err) reject(err)
+        else resolve()
+      })
+    })
+  }
+  async dbClose () {
+    if (this.db) {
       return new Promise((resolve, reject) => {
-        let dbPath = this.dataRootPath + '\\article.db'
-        this.db = new sqlite3.Database(dbPath, err => {
+        this.db.close(err => {
           if (err) reject(err)
           else resolve()
         })
@@ -101,6 +110,7 @@ class BuildMenuData {
       this.db.all(sql, params, (err, res) => {
         if (err) reject(err)
         else resolve(res)
+        this.dbClose()
       })
     })
   }
