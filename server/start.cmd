@@ -1,1 +1,1 @@
-pm2 start server.run.js -n docs
+pm2 start pm2.config.json

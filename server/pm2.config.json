@@ -1,0 +1,22 @@
+{
+  "name"        : "docs",
+  "script"      : "./server.run.js",
+  "cwd"         : "./",
+  "watch": [
+    "build-data.js",
+    "router.js"
+  ],
+  "ignore_watch" : [
+    "node_modules", 
+    "data",
+    "docs"
+  ],
+  "watch_options": {
+    "followSymlinks": false
+  },
+  "error_file" : "./logs/app-err.log",
+  "out_file"   : "./logs/app-out.log",
+  "env": {
+      "NODE_ENV": "production"
+  }
+}
