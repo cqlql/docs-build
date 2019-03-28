@@ -31,7 +31,7 @@ const windowCtrlKey = {
 
 const dataApi = {
   urlPathParamsHandle (path) {
-    let names = path.split('\\')
+    let names = path.split('/')
     let newNames = []
     names.forEach(name => {
       newNames.push(encodeURIComponent(name))

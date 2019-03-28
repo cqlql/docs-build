@@ -65,7 +65,7 @@ router.get('/api/menu', function (req, res) {
 // 临时功能，因为没有正式部署
 // 用来同步 http://192.168.1.252:1003 文档
 router.get('/api/sync', function (req, res) {
-  require('../download/download.js')(
+  require('./download.js')(
     'http://192.168.1.252:1003/',
     // 'http://192.168.1.222:8080/', // 测试用
     function (d, err) {

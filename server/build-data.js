@@ -24,8 +24,8 @@ class BuildMenuData {
     for (let i = 0, len = names.length; i < len; i++) {
       let fullName = names[i]
       if (this.ignore && this.ignore.test(fullName)) continue
-      let dir = prevDir + '\\' + fullName
-      // let url = prevUrl + '\\' + encodeURIComponent(fullName)
+      let dir = prevDir + '/' + fullName
+      // let url = prevUrl + '/' + encodeURIComponent(fullName)
       let name = fullName.replace(/\.md$/, '')
       let data = {
         index: this.index++,
@@ -75,11 +75,11 @@ class BuildMenuData {
 
     await this.buildData()
     this.dbClose()
-    await fsPromises.writeFile(this.dataRootPath + '\\' + 'menu.json', JSON.stringify(this.data))
+    await fsPromises.writeFile(this.dataRootPath + '/' + 'menu.json', JSON.stringify(this.data))
   }
   async dbOpen () {
     return new Promise((resolve, reject) => {
-      let dbPath = this.dataRootPath + '\\article.db'
+      let dbPath = this.dataRootPath + '/article.db'
       this.db = new sqlite3.Database(dbPath, err => {
         if (err) reject(err)
         else resolve()
