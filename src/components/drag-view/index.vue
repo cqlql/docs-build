@@ -77,10 +77,11 @@ export default {
 }
 .bar {
   position: absolute;
-  right: -2px;
+  right: 0;
   top: 0;
   width: 10px;
   height: 100%;
+  transform: translateX(60%);
   cursor: e-resize;
 }
 </style>

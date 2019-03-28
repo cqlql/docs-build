@@ -18,7 +18,7 @@ class BuildMenuData {
     this.data = { children: [] }
   }
 
-  async buildData (prevDir = '', children = this.data.children, level = 0) {
+  async buildData (add, prevDir = '', children = this.data.children, level = 0) {
     level++
     let names = await fsPromises.readdir(this.docsRootPath + prevDir)
     for (let i = 0, len = names.length; i < len; i++) {
@@ -39,43 +39,66 @@ class BuildMenuData {
       let filePath = this.docsRootPath + dir
       if (fs.statSync(filePath).isDirectory()) {
         data.isFile = false
-        await this.buildData(dir, data.children, level)
+        await this.buildData(add, dir, data.children, level)
       } else {
         // 生成搜索索引数据
         let data = await fsPromises.readFile(filePath, 'utf8')
         data = this.clearMarkdown(data)
-        await this.addIndexData(name, dir, data)
+        // await this.addIndexData(name, dir, data) // 插入数据库
+        add(name, dir, data) // 插入数据库
       }
     }
   }
   addIndexData (name, path, content) {
-    return this.dbRun(`
-    INSERT INTO articles (name, path, content)
-    VALUES (?, ?, ?);
-    `, [name, path, content])
+    // return this.dbRun(`
+    // INSERT INTO articles (name, path, content)
+    // VALUES (?, ?, ?);
+    // `, [name, path, content])
+    this.stmt.run(name, path, content)
   }
   async build () {
     await this.dbOpen()
     try {
       await this.dbRun(`DROP TABLE articles;`)
     } catch (err) {}
-    await this.dbRun(`
-    CREATE TABLE articles(
-      id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-      name VARCHAR(100),
-      path VARCHAR(200),
-      content TEXT
-    );
-    `)
+    // await this.dbRun(`
+    // CREATE TABLE articles(
+    //   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    //   name VARCHAR(100),
+    //   path VARCHAR(200),
+    //   content TEXT
+    // );
+    // `)
     // await this.dbRun(`CREATE INDEX article_index ON articles (path, content);`)
 
     // 清空
     this.index = 0
     this.data = { children: [] }
 
-    await this.buildData()
-    this.dbClose()
-    await fsPromises.writeFile(this.dataRootPath + '/' + 'menu.json', JSON.stringify(this.data))
+    return new Promise(resolve => {
+      let db = this.db
+      let that = this
+      db.serialize(async function () {
+        db.run(`
+        CREATE TABLE articles(
+          id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+          name VARCHAR(100),
+          path VARCHAR(200),
+          content TEXT
+        );
+        `)
+        let stmt = db.prepare('INSERT INTO articles (name, path, content) VALUES (?,?,?)')
+        db.parallelize(async function () {
+          await that.buildData((name, path, content) => {
+            stmt.run(name, path, content)
+          })
+          await fsPromises.writeFile(that.dataRootPath + '//' + 'menu.json', JSON.stringify(that.data))
+          stmt.finalize()
+          resolve()
+        })
+      })
+      this.dbClose()
+    })
   }
   async dbOpen () {
     return new Promise((resolve, reject) => {

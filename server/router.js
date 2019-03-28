@@ -38,14 +38,7 @@ router.get('/api/search', async function (req, res) {
     message: ''
   })
 })
-router.get('/api/build', async function (req, res) {
-  await buildData.build()
-  res.send({
-    status: 200,
-    result: '',
-    message: '数据生成成功'
-  })
-})
+
 router.get('/api/menu', function (req, res) {
   fs.readFile(path.resolve(__dirname, './data/menu.json'), 'utf8', function (err, data) {
     if (err) {
@@ -61,30 +54,39 @@ router.get('/api/menu', function (req, res) {
     }
   })
 })
+// router.get('/api/build', async function (req, res) {
+//   let t = Date.now()
+//   await buildData.build()
+//   res.send({
+//     status: 200,
+//     result: '',
+//     message: `数据生成成功。耗时：${(Date.now() - t) / 1000}s`
+//   })
+// })
 
 // 临时功能，因为没有正式部署
 // 用来同步 http://192.168.1.252:1003 文档
-router.get('/api/sync', function (req, res) {
-  require('./download.js')(
-    'http://192.168.1.252:1003/',
-    // 'http://192.168.1.222:8080/', // 测试用
-    function (d, err) {
-      if (err) {
-        res.send({
-          status: 0,
-          result: '',
-          message: err
-        })
-      } else {
-        res.send({
-          status: 200,
-          result: '',
-          message: '文档下载成功'
-        })
-      }
-    }
-  )
-})
+// router.get('/api/sync', function (req, res) {
+//   require('./download.js')(
+//     'http://192.168.1.252:1003/',
+//     // 'http://192.168.1.222:8080/', // 测试用
+//     function (d, err) {
+//       if (err) {
+//         res.send({
+//           status: 0,
+//           result: '',
+//           message: err
+//         })
+//       } else {
+//         res.send({
+//           status: 200,
+//           result: '',
+//           message: '文档下载成功'
+//         })
+//       }
+//     }
+//   )
+// })
 
 // router.get('/api/docs', async function (req, res) {
 //   let cont = await fsPromises.readFile(path.resolve(__dirname, 'docs' + req.query.path), 'utf8')
