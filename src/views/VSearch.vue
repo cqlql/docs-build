@@ -55,7 +55,7 @@ export default {
   methods: {
     capture (path, content) {
       let { wd } = this
-      wd = wd.replace(/[\x5E\x24\x2A\x2B\x3F\x2E\x28\x29\x3A\x3D\x21\x7C\x7B\x7D\x2C\x5C\x5B\x5D]/g, '\\$&') // 转义正则符号
+      wd = wd.trim().replace(/[\x5E\x24\x2A\x2B\x3F\x2E\x28\x29\x3A\x3D\x21\x7C\x7B\x7D\x2C\x5C\x5B\x5D]/g, '\\$&') // 转义正则符号
       wd = wd.replace(/\s+/g, '.*?')
       let reg = new RegExp(`(.{0,20})(${wd})(.{0,20})`, 'i')
       let res = path.match(reg)
