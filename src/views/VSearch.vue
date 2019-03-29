@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.search">
-    <input ref="eIpt" v-model="wd" type="text" placeholder="搜索" @blur="blur">
-    <div v-if="show" :class="$style.result" @mousedown="$event.preventDefault()">
+    <input ref="eIpt" v-model="wd" type="text" placeholder="搜索" @blur="blur" @focus="focus">
+    <div v-show="show" :class="$style.result" @mousedown="$event.preventDefault()">
       <table>
         <tr v-for="item of searchResult" :key="item.id" @click="select(item.path)">
           <th>{{ item.name }}</th>
@@ -23,15 +23,16 @@ import dataApi from '@/views/data-api.js'
 export default {
   data () {
     return {
+      show: false,
       wd: '',
       searchResult: []
     }
   },
-  computed: {
-    show () {
-      return this.searchResult.length > 0
-    }
-  },
+  // computed: {
+  //   show () {
+  //     return this.searchResult.length > 0
+  //   }
+  // },
   watch: {
     async wd (wd) {
       if (this.isLoading) return
@@ -55,6 +56,7 @@ export default {
     capture (path, content) {
       let { wd } = this
       wd = wd.replace(/[\x5E\x24\x2A\x2B\x3F\x2E\x28\x29\x3A\x3D\x21\x7C\x7B\x7D\x2C\x5C\x5B\x5D]/g, '\\$&') // 转义正则符号
+      wd = wd.replace(/\s+/g, '.*?')
       let reg = new RegExp(`(.{0,20})(${wd})(.{0,20})`, 'i')
       let res = path.match(reg)
       // console.log('path', res)
@@ -68,7 +70,11 @@ export default {
       return `${res[1]}<b>${res[2]}</b>${res[3]}`
     },
     blur () {
-      this.wd = ''
+      // this.wd = ''
+      // this.show = false
+    },
+    focus () {
+      this.show = true
     },
     select (path) {
       this.$emit('select', path)

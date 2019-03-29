@@ -27,7 +27,8 @@ router.get('/api/search', async function (req, res) {
   let wd = req.query.wd || ''
   let d
   if (wd) {
-    d = await buildData.dbAll(`SELECT id, name, path, content FROM articles WHERE path LIKE '%${wd}%' OR content LIKE '%${wd}%' LIMIT 20;`)
+    wd = wd.replace(/%|_/g, '\\$&').replace(/\s/, '%')
+    d = await buildData.dbAll(`SELECT id, name, path, content FROM articles WHERE path LIKE '%${wd}%' OR content LIKE '%${wd}%' ESCAPE '\\' LIMIT 20;`)
   } else {
     d = []
   }
