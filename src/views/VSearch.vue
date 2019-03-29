@@ -8,19 +8,21 @@
           <td><pre v-html="item.content"/></td>
         </tr>
       </table>
-      <!-- <dl v-for="item of searchResult" :key="item.id" @click="$emit('select', item.path)">
-        <dt>{{ item.name }}</dt>
-        <dd>
-          <pre v-html="item.content"/>
-        </dd>
-      </dl> -->
+      <ScrollBottomLoadPage
+        :first-load="false"
+        @load="load"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import dataApi from '@/views/data-api.js'
+import ScrollBottomLoadPage from './scroll-bottom-load/ScrollBottomLoadPage.vue'
 export default {
+  components: {
+    ScrollBottomLoadPage
+  },
   data () {
     return {
       show: false,
@@ -79,6 +81,9 @@ export default {
     select (path) {
       this.$emit('select', path)
       this.$refs.eIpt.blur()
+    },
+    load ({complete, page}) {
+      console.log(page)
     }
   }
 }
