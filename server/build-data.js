@@ -47,16 +47,17 @@ class BuildMenuData {
 
         switch (this.docsIds.check(dir, content)) { // 检查是不是新的，入数据库
           case 0: // 新的
-            add(name, dir, content, true) // 插入数据库
+            await add(name, dir, content, true) // 插入数据库
             break
           case 1: // 修改的
-            add(name, dir, content) // 插入数据库
+            await add(name, dir, content) // 插入数据库
             break
         }
       }
     }
   }
-  async build () {
+  // 并发写入逻辑，弃用
+  async build2 () {
     // try {
     //   await this.dbRun(`DROP TABLE articles;`)
     // } catch (err) {}
@@ -107,11 +108,49 @@ class BuildMenuData {
             db.run(`DELETE FROM articles WHERE path='${path}'`)
           })
           if (stmt) stmt.finalize()
-          that.dbClose()
           resolve()
         })
       })
+      // that.dbClose()
     })
+  }
+  // 逐次写入逻辑
+  async build () {
+    // 清空
+    this.index = 0
+    this.data = { children: [] }
+
+    this.docsIds = new DocsIds()
+
+    await this.dbOpen()
+    await this.dbRun(`
+    CREATE TABLE IF NOT EXISTS articles(
+      id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+      name VARCHAR(100),
+      path VARCHAR(200),
+      content TEXT
+    );
+    `)
+
+    await this.buildData((name, path, content, isNew) => {
+      // 新增情况
+      if (isNew) {
+        console.log('新增', path)
+        return this.dbRun(`INSERT INTO articles (name, path, content) VALUES (?, ?, ?);`, [name, path, content])
+      }
+      // 修改
+      console.log('修改', path)
+      return this.dbRun(`UPDATE articles SET content=? WHERE path=?`, [content, path])
+      // 创建索引
+      // return this.dbRun(`CREATE INDEX article_index ON articles (path, content);`)
+    })
+
+    await fsPromises.writeFile(this.dataRootPath + '/' + 'menu.json', JSON.stringify(this.data))
+    await this.docsIds.finish(path => {
+      console.log('删除', path)
+      return this.dbRun(`DELETE FROM articles WHERE path=?`, [path])
+    })
+    await this.dbClose()
   }
   async dbOpen () {
     return new Promise((resolve, reject) => {
@@ -174,7 +213,7 @@ class BuildMenuData {
   //     let stmt = db.prepare('INSERT INTO articles2 (name, path, content) VALUES (?,?,?)')
   //     db.parallelize(async function () {
   //       for (let i = 10; i--;) {
-  //         stmt.run('name2' + i, 'path' + i, 'content')          
+  //         stmt.run('name2' + i, 'path' + i, 'content')
   //       }
   //       db.run(`DELETE FROM articles2 WHERE path='path0';`)
   //       stmt.finalize()

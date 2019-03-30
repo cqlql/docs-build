@@ -34,18 +34,18 @@ class DocsIds {
     ids[filePath] = this.checksum(content)
     return 0
   }
-  finish (cb) {
+  async finish (cb) {
     // 将不存在的从数据中删除
     let { ids, noExistIds } = this
     for (let filePath in noExistIds) {
       if (noExistIds.hasOwnProperty(filePath)) {
-        cb(filePath)
+        await cb(filePath)
         delete ids[filePath]
       }
     }
 
     // 重新写入 ids
-    fsPromises.writeFile(this.filePath, JSON.stringify(ids), 'utf8')
+    await fsPromises.writeFile(this.filePath, JSON.stringify(ids), 'utf8')
   }
   checksum (str, algorithm, encoding) {
     return crypto
