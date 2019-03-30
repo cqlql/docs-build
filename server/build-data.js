@@ -16,7 +16,7 @@ class BuildMenuData {
     // this.ignore = /\.editorconfig/
     this.ignore = config.ignore
 
-    this.data = { children: [] }
+    // this.data = { children: [] }
   }
 
   async buildData (add, prevDir = '', children = this.data.children, level = 0) {
