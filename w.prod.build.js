@@ -41,8 +41,8 @@ const baseProdConf = getProdConf({
 })
 
 // 打包输出路径设置：
-let outputPath = path.resolve(__dirname, './server/dist/public')
-
+let outputPath = path.resolve(__dirname, './server/public')
+console.log(outputPath)
 const prodConf = {
   // 不打包的模块
   // 键为 import 调用名，值为全局名称
@@ -72,7 +72,7 @@ const prodConf = {
       },
       done () {
         // 编译后删除
-        // filterRemove(outputPath, /\.(css)$/)
+        filterRemove(outputPath, /\.css$|^js$/)
       }
     }),
     // 将抽离的 css、js 包含进 html 文件
@@ -90,11 +90,11 @@ const prodConf = {
     //   // 'js/vue-router.min.js',
     // ]),
     // 打包分析
-    new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)({
-      analyzerMode: 'static',
-      reportFilename: './report.html',
-      openAnalyzer: false // 自动打开
-    })
+    // new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)({
+    //   analyzerMode: 'static',
+    //   reportFilename: './report.html',
+    //   openAnalyzer: false // 自动打开
+    // })
   ]
 }
 
