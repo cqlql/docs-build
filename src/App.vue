@@ -73,11 +73,15 @@ export default {
     // this.windowScroll.bind(top => {
     //   this.top = top
     // })
-
+    dataApi.ctrlKeyBind()
+    
     this.menuData = await dataApi.getMenu()
     let path = location.hash.substr(1)
     await this.$nextTick()
     if (path) this.searchSelect(decodeURI(path) + '.md')
+  },
+  destroyed () {
+    dataApi.ctrlKeyUnbind()
   },
   // destroyed () {
   //   this.windowScroll.unbind()

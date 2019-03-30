@@ -45,8 +45,8 @@ export default {
         }
         let { classList } = elem
         if (classList.contains('menu-item')) {
-          if (dataApi.ctrlKeyDown) {
-            window.open(`${location.origin + location.pathname}#/${elem.id}`)
+          if (dataApi.ctrlKeyDown && classList.contains('is-file')) {
+            window.open(`${location.origin + location.pathname}#${elem.id.replace(/\.md$/, '')}`)
             return false
           }
           if (eArrows) {

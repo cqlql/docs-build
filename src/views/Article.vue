@@ -16,9 +16,7 @@ export default {
   },
   computed: {
     htmlCont () {
-      // const tokens = marked.lexer(this.content);
-      // console.log(tokens)
-      return marked(this.content)
+      return marked(this.content.replace(/\+\+\+([\d\D]+?)\+\+\+/, '```$1```'))
     }
   },
   created () {
