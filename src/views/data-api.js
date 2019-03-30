@@ -47,8 +47,8 @@ const dataApi = {
   // getArticle (path) {
   //   return axios.get('/api/docs?path=' + encodeURIComponent(path))
   // },
-  search (wd) {
-    return axios.get('/api/search?wd=' + encodeURIComponent(wd))
+  search (wd, page) {
+    return axios.get(`/api/search?wd=${encodeURIComponent(wd)}&page=${page}`)
   },
   ctrlKeyBind: windowCtrlKey.bind,
   ctrlKeyUnbind: windowCtrlKey.unbind
