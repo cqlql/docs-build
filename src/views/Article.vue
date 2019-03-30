@@ -16,7 +16,8 @@ export default {
   },
   computed: {
     htmlCont () {
-      return marked(this.content.replace(/\+\+\+([\d\D]+?)\+\+\+/, '```$1```'))
+      // return marked(this.content.replace(/\+\+\+([\d\D]+?)\+\+\+/, '```$1```'))
+      return marked(this.content)
     }
   },
   created () {
