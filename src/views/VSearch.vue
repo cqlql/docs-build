@@ -67,7 +67,16 @@ export default {
       if (!res) {
         return content.substr(0, 20)
       }
-      return `${res[1]}<b>${res[2].substr(0, 20)}</b>${res[3]}`
+      let real = res[2]
+      let realEnd = ''
+      let endIndex = real.length - 20
+      if (endIndex > 0) {
+        if (endIndex < 20) {
+          endIndex = 20
+        }
+        realEnd = '...' + real.substr(endIndex)
+      }
+      return `${res[1]}<b>${real.substr(0, 20)}${realEnd}</b>${res[3]}`
     },
     blur () {
       this.show = false
@@ -84,7 +93,7 @@ export default {
     async load ({ complete, page }) {
       let searchResult = []
       try {
-        searchResult = await dataApi.search(this.wd, page)
+        searchResult = await dataApi.search(this.wd.replace(/\s+/g, ' '), page)
         searchResult.forEach(d => {
           d.content = this.capture(d.path, d.content)
         })
