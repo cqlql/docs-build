@@ -13,9 +13,6 @@ function importAll (r) {
 if (process.env.NODE_ENV === 'production') {
   // 正式环境
   importAll(require.context('./router', false, /(hello|hello2)\.js$/))
-  routes.concat(
-    
-  )
 } else {
   // 开发环境
 

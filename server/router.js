@@ -25,10 +25,11 @@ const buildData = new BuildData()
 // http://192.168.1.222:3003/api/search?wd=cmd%20%E5%91%BD%E4%BB%A4%E8%A1%8C
 router.get('/api/search', async function (req, res) {
   let wd = req.query.wd || ''
+  let page = req.query.page || 0
   let d
   if (wd) {
     wd = wd.replace(/%|_/g, '\\$&').replace(/\s/, '%')
-    d = await buildData.dbAll(`SELECT id, name, path, content FROM articles WHERE path LIKE '%${wd}%' OR content LIKE '%${wd}%' ESCAPE '\\' LIMIT 20;`)
+    d = await buildData.dbAll(`SELECT id, name, path, content FROM articles WHERE path LIKE '%${wd}%' OR content LIKE '%${wd}%' ESCAPE '\\' LIMIT 20 OFFSET ${page * 20};`)
   } else {
     d = []
   }

@@ -1,6 +1,6 @@
 <template>
   <div class="loader-bottom" :class="[color==='white'?'l-white':'', (isShow&&noData===false)?'':'hide']">
-    <span v-if="isFinish" class="txt">我也有底线~</span>
+    <span v-if="isFinish" class="txt">- 没有更多了 -</span>
     <div v-else class="hide" :class="{show:isLoad}">
       <!-- <span class="preloader" :class="[color==='white'?'preloader-white':'']"></span> -->
       <LoadIco :color="color" class="preloader" />
@@ -86,7 +86,7 @@ export default {
       if (this.isFinish) return
       this.$nextTick(() => {
         // 刷新body高度
-        this.loaderBottom.update()
+        // this.loaderBottom.update()
         this.loaded()
       })
     },
@@ -122,7 +122,7 @@ export default {
       this.offScroll()
       this.loaderBottom.listener(this.scroll)
       // 刷新body高度
-      this.loaderBottom.update()
+      // this.loaderBottom.update()
     },
     // 隐藏控件
     hide () {
@@ -131,6 +131,11 @@ export default {
     // 显示控件
     show () {
       this.isShow = true
+    },
+    // 停止加载检测，并隐藏
+    close () {
+      this.offScroll()
+      this.hide()
     }
   },
   destroyed () {

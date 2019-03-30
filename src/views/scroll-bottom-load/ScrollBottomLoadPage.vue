@@ -58,7 +58,7 @@ export default {
       })
     },
     reload () {
-      this.page = 0
+      this.page = this.startPage - 1
       this.vScrollBottomLoad.reStart()
     },
     reset () {
@@ -69,6 +69,9 @@ export default {
     },
     hide () {
       this.vScrollBottomLoad.hide()
+    },
+    close () {
+      this.vScrollBottomLoad.close()
     },
     reTryLoad () {
       this.vScrollBottomLoad.reTryLoad()
