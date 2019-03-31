@@ -152,7 +152,7 @@ class BuildMenuData {
     })
     await this.dbClose()
   }
-  async dbOpen () {
+  dbOpen () {
     return new Promise((resolve, reject) => {
       let dbPath = this.dataRootPath + '/article.db'
       let db = this.db = new sqlite3.Database(dbPath, err => {
@@ -161,7 +161,7 @@ class BuildMenuData {
       })
     })
   }
-  async dbClose () {
+  dbClose () {
     if (this.db) {
       return new Promise((resolve, reject) => {
         this.db.close(err => {

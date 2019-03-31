@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs')
 // const getIPAdress = require('../build/get-ip-adress')
 const express = require('express')
-const router = require('./router')
+const router = require('./build/router')
 const config = require('./config')
 
 const bodyParser = require('body-parser')

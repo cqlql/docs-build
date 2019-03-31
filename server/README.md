@@ -1,17 +1,17 @@
 
-## 开始
+## 开始。项目根目录执行
 
 ```sh
-# 安装依赖。项目根目录运行
+# 安装依赖
 npm i
 
-# 生成数据
-curl http://localhost:3003/api/build
-# 或者
-node docs-build/build-data-excu.js
+# 删除 data 并重新生成
+node build.restart.js
+# 不破坏现有 data 进行更新操作
+node build.restart.js
 
-# 开启 node 服务，使用 pm2 守护进程
-pm2 start docs-build/server.run.js
+# 开启 node web 服务
+node server.run.js
 ```
 
 ## config.js
