@@ -1,16 +1,16 @@
 const marked = require('marked')
 // const path = require('path')
 const fs = require('fs-extra')
-const sqlite3 = require('sqlite3').verbose()
+const sqlite3 = require('./sqlite')
 const fsPromises = fs.promises
-const config = require('./config.js')
+const config = require('../config.js')
 const DocsIds = require('./docs-ids.js')
 
-class BuildMenuData {
+class BuildMenuData extends sqlite3 {
   constructor () {
-    // this.dataRootPath = config.dataPath
-    fs.ensureDirSync(this.dataRootPath = config.dataPath) // 必须确保 data 目录存在
-    this.docsRootPath = config.docsPath
+    super()
+    this.dataRootDir = config.dataDir
+    this.docsRootDir = config.docsDir
 
     // 排除文件或者目录
     // this.ignore = /\.editorconfig/
@@ -21,7 +21,7 @@ class BuildMenuData {
 
   async buildData (add, prevDir = '', children = this.data.children, level = 0) {
     level++
-    let names = await fsPromises.readdir(this.docsRootPath + prevDir)
+    let names = await fsPromises.readdir(this.docsRootDir + prevDir)
     for (let i = 0, len = names.length; i < len; i++) {
       let fullName = names[i]
       if (this.ignore && this.ignore.test(fullName)) continue
@@ -37,7 +37,7 @@ class BuildMenuData {
         children: []
       }
       children.push(data)
-      let filePath = this.docsRootPath + dir
+      let filePath = this.docsRootDir + dir
       if (fs.statSync(filePath).isDirectory()) { // 目录情况
         data.isFile = false
         await this.buildData(add, dir, data.children, level)
@@ -102,7 +102,7 @@ class BuildMenuData {
             }
             // db.run(`CREATE INDEX article_index ON articles (path, content);`) // 创建索引
           })
-          await fsPromises.writeFile(that.dataRootPath + '/' + 'menu.json', JSON.stringify(that.data))
+          await fsPromises.writeFile(that.dataRootDir + '/' + 'menu.json', JSON.stringify(that.data))
           that.docsIds.finish(path => {
             console.log('删除', path)
             db.run(`DELETE FROM articles WHERE path='${path}'`)
@@ -125,7 +125,6 @@ class BuildMenuData {
     await this.dbOpen()
     await this.dbRun(`
     CREATE TABLE IF NOT EXISTS articles(
-      id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
       name VARCHAR(100),
       path VARCHAR(200),
       content TEXT
@@ -145,49 +144,12 @@ class BuildMenuData {
       // return this.dbRun(`CREATE INDEX article_index ON articles (path, content);`)
     })
 
-    await fsPromises.writeFile(this.dataRootPath + '/' + 'menu.json', JSON.stringify(this.data))
+    await fsPromises.writeFile(this.dataRootDir + '/' + 'menu.json', JSON.stringify(this.data))
     await this.docsIds.finish(path => {
       console.log('删除', path)
       return this.dbRun(`DELETE FROM articles WHERE path=?`, [path])
     })
     await this.dbClose()
-  }
-  dbOpen () {
-    return new Promise((resolve, reject) => {
-      let dbPath = this.dataRootPath + '/article.db'
-      let db = this.db = new sqlite3.Database(dbPath, err => {
-        if (err) reject(err)
-        else resolve(db)
-      })
-    })
-  }
-  dbClose () {
-    if (this.db) {
-      return new Promise((resolve, reject) => {
-        this.db.close(err => {
-          if (err) reject(err)
-          else resolve()
-        })
-      })
-    }
-  }
-  dbRun (sql, params) {
-    return new Promise((resolve, reject) => {
-      this.db.run(sql, params, err => {
-        if (err) reject(err)
-        else resolve()
-      })
-    })
-  }
-  async dbAll (sql, params) {
-    await this.dbOpen()
-    return new Promise((resolve, reject) => {
-      this.db.all(sql, params, (err, res) => {
-        if (err) reject(err)
-        else resolve(res)
-        this.dbClose()
-      })
-    })
   }
   clearMarkdown (cont) {
     let tokens = marked.lexer(cont)

@@ -1,10 +1,9 @@
 const express = require('express')
 const router = express.Router()
-const BuildData = require('./build-data.js')
+const Sqlite = require('./sqlite')
 const path = require('path')
 const fs = require('fs')
 // const fsPromises = fs.promises
-const buildData = new BuildData()
 
 // http://192.168.1.222:3003/api/search?wd=cmd%20%E5%91%BD%E4%BB%A4%E8%A1%8C
 router.get('/api/search', async function (req, res) {
@@ -13,7 +12,7 @@ router.get('/api/search', async function (req, res) {
   let d
   if (wd) {
     wd = wd.replace(/%|_/g, '\\$&').replace(/\s+/g, '%')
-    d = await buildData.dbAll(`SELECT id, name, path, content FROM articles WHERE path LIKE '%${wd}%' OR content LIKE '%${wd}%' ESCAPE '\\' LIMIT 20 OFFSET ${page * 20};`)
+    d = await (new Sqlite()).dbAll(`SELECT id, name, path, content FROM articles WHERE path LIKE '%${wd}%' OR content LIKE '%${wd}%' ESCAPE '\\' LIMIT 20 OFFSET ${page * 20};`)
   } else {
     d = []
   }
@@ -26,7 +25,7 @@ router.get('/api/search', async function (req, res) {
 })
 
 router.get('/api/menu', function (req, res) {
-  fs.readFile(path.resolve(__dirname, './data/menu.json'), 'utf8', function (err, data) {
+  fs.readFile(path.resolve(__dirname, '../data/menu.json'), 'utf8', function (err, data) {
     if (err) {
       res.send({
         status: 0,

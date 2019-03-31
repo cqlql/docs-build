@@ -3,8 +3,8 @@
   "script"      : "./server.run.js",
   "cwd"         : "./",
   "watch": [
-    "build-data.js",
-    "router.js"
+    "build",
+    "server.run.js"
   ],
   "ignore_watch" : [
     "node_modules", 

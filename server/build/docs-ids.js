@@ -1,12 +1,12 @@
 const crypto = require('crypto')
-const config = require('./config.js')
+const config = require('../config.js')
 const fs = require('fs-extra')
 const fsPromises = fs.promises
 class DocsIds {
   constructor () {
     this.ids = {}
     this.noExistIds = {}
-    this.filePath = config.dataPath + '/ids.json'
+    this.filePath = config.dataDir + '/ids.json'
     this.init()
   }
   async init () {
