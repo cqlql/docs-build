@@ -13,11 +13,9 @@ export default class {
     }
   }
   listener (fn) {
-    console.log('add', this.el)
     this.el.addEventListener('scroll', fn)
   }
   removeListener (fn) {
-    console.log('remove')
     this.el.removeEventListener('scroll', fn)
   }
   // update () {
