@@ -156,7 +156,7 @@ export default {
     const menuList = build(menuData.children)
 
     return (
-      <div class="menu">
+      <div class="menu" onMousedown={e => { e.preventDefault() }}>
         <div class="menu-tool">
           <div class="op" onClick={this.onFoldLevel}>
             <a href="javascript:;" class="level" title="折叠所有">0</a>

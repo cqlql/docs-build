@@ -24,10 +24,10 @@ export default {
     this.hxSelect = new DomSelect()
     this.articleSelect = new DomSelect()
   },
-  // mounted () {
-  //   // 文章定位优化
-  //   this.$el.children[0].style.paddingBottom = innerHeight / 2 + 'px'
-  // },
+  mounted () {
+    // 文章定位优化
+    this.$el.children[0].style.paddingBottom = innerHeight / 2 + 'px'
+  },
   // methods: {
   //   onSelect ({ target }) {
   //     if (/H\d/.test(target.tagName)) {
@@ -66,6 +66,7 @@ export default {
     line-height: 1.5;
     word-wrap: break-word;
   }
+  .markdown-body table {border-collapse: collapse;}
   .markdown-body strong {
     color: #d00;
   }
