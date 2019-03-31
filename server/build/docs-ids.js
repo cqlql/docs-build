@@ -28,7 +28,7 @@ class DocsIds {
         ids[filePath] = newHash
         return 1
       }
-      return 2
+      return 2 // 不做任何操作情况
     }
     // 不存在
     ids[filePath] = this.checksum(content)
