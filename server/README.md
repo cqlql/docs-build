@@ -5,7 +5,7 @@
 # 安装依赖
 npm i
 
-# 删除 data 并重新生成
+# 删除 data 全新生成
 node build.restart.js
 # 不破坏现有 data 进行更新操作
 node build.restart.js
