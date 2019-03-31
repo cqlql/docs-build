@@ -12,7 +12,7 @@ router.get('/api/search', async function (req, res) {
   let d
   if (wd) {
     wd = wd.replace(/%|_/g, '\\$&').replace(/\s+/g, '%')
-    d = await (new Sqlite()).dbAll(`SELECT id, name, path, content FROM articles WHERE path LIKE '%${wd}%' OR content LIKE '%${wd}%' ESCAPE '\\' LIMIT 20 OFFSET ${page * 20};`)
+    d = await (new Sqlite()).dbAll(`SELECT name, path, content FROM articles WHERE path LIKE '%${wd}%' OR content LIKE '%${wd}%' ESCAPE '\\' LIMIT 20 OFFSET ${page * 20};`)
   } else {
     d = []
   }

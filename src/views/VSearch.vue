@@ -3,7 +3,7 @@
     <input ref="eIpt" v-model.trim="wd" type="text" placeholder="搜索" @blur="blur" @focus="focus">
     <div v-show="show" :class="$style.result" @mousedown="$event.preventDefault()">
       <table>
-        <tr v-for="item of searchResult" :key="item.id" @click="select(item.path)">
+        <tr v-for="item of searchResult" :key="item.path" @click="select(item.path)">
           <th>{{ item.name }}</th>
           <td><pre v-html="item.content" /></td>
         </tr>
