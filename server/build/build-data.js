@@ -56,64 +56,6 @@ class BuildMenuData extends sqlite3 {
       }
     }
   }
-  // 并发写入逻辑，弃用
-  async build2 () {
-    // try {
-    //   await this.dbRun(`DROP TABLE articles;`)
-    // } catch (err) {}
-    // await this.dbRun(`
-    // CREATE TABLE articles(
-    //   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    //   name VARCHAR(100),
-    //   path VARCHAR(200),
-    //   content TEXT
-    // );
-    // `)
-    this.docsIds = new DocsIds()
-
-    // 清空
-    this.index = 0
-    this.data = { children: [] }
-
-    let db = await this.dbOpen()
-    return new Promise(resolve => {
-      let that = this
-      db.serialize(async function () {
-        db.run(`
-        CREATE TABLE IF NOT EXISTS articles(
-          id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-          name VARCHAR(100),
-          path VARCHAR(200),
-          content TEXT
-        );
-        `)
-        db.parallelize(async function () {
-          let stmt
-          await that.buildData((name, path, content, isNew) => {
-            if (isNew) { // 新增情况
-              if (!stmt) {
-                stmt = db.prepare('INSERT INTO articles (name, path, content) VALUES (?,?,?)')
-              }
-              console.log('新增', path)
-              stmt.run(name, path, content)
-            } else { // 修改
-              console.log('修改', path)
-              db.run(`UPDATE articles SET content='${content}' WHERE path='${path}'`)
-            }
-            // db.run(`CREATE INDEX article_index ON articles (path, content);`) // 创建索引
-          })
-          await fsPromises.writeFile(that.dataRootDir + '/' + 'menu.json', JSON.stringify(that.data))
-          that.docsIds.finish(path => {
-            console.log('删除', path)
-            db.run(`DELETE FROM articles WHERE path='${path}'`)
-          })
-          if (stmt) stmt.finalize()
-          resolve()
-        })
-      })
-      // that.dbClose()
-    })
-  }
   // 逐次写入逻辑
   async build () {
     // 清空
