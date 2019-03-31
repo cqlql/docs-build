@@ -14,7 +14,7 @@ class DocsIds {
       let idsJson = await fsPromises.readFile(this.filePath)
       this.ids = JSON.parse(idsJson)
       this.noExistIds = JSON.parse(idsJson)
-    } catch (err) {
+    } catch (err) { // 文件不存在则创建
       await fsPromises.writeFile(this.filePath, '{}', 'utf8')
     }
   }
