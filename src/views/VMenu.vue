@@ -59,9 +59,9 @@ export default {
           } else {
             classList.remove('fold')
           }
-          let index = elem.dataset.index * 1
-          if (index !== this.selectedIndex) {
-            this.select(index)
+          let id = elem.id
+          if (id !== this.selectedId) {
+            this.select(id)
             if (classList.contains('is-file')) {
               this.$emit('select', elem.id)
             }
@@ -103,13 +103,12 @@ export default {
         }
       }
     },
-    select (index) {
-      this.selectedIndex = index
+    select (id) {
+      this.selectedId = id
     },
-    unfold (index) {
+    unfold (id) {
       const end = this.$el
-      const items = this.getItems()
-      let item = items[index]
+      let item = document.getElementById(id)
       while (1) {
         // if (item === end) break
         let { classList } = item
@@ -118,12 +117,12 @@ export default {
         if (item === end) break
       }
     },
-    scrollTo (index) {
-      this.select(index)
-      this.unfold(index)
+    scrollTo (id) {
+      this.select(id)
+      this.unfold(id)
       setTimeout(() => {
         const { eMenuList } = this
-        const item = this.getItems()[index]
+        const item = document.getElementById(id)
         eMenuList.scrollTop = relativexy(item, eMenuList).top - eMenuList.clientHeight / 2 + 13
       }, 1)
       // this.$nextTick(() => {
@@ -135,17 +134,15 @@ export default {
     }
   },
   render () {
-    const { menuData, foldLevel, selectedIndex } = this
-    let index = 0
+    const { menuData, foldLevel, selectedId } = this
     function build (children = []) {
       const list = []
       children.forEach(item => {
         let { level, children, name, path, isFile } = item
-        let currIndex = index++
         const childList = build(children)
         list.push(
-          <div class={['menu-item', level < foldLevel ? '' : 'fold', isFile ? 'is-file' : '']} key={currIndex} id={path} data-index={currIndex} data-level={level}>
-            <div class={['item', currIndex === selectedIndex && 'selected']}>
+          <div class={['menu-item', level < foldLevel ? '' : 'fold', isFile ? 'is-file' : '']} key={path} id={path} data-level={level}>
+            <div class={['item', path === selectedId && 'selected']}>
               <i class={children.length === 0 ? 'hidden' : ''}></i>
               <span class="txt" domPropsInnerHTML={name}></span>
             </div>

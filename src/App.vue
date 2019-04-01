@@ -104,10 +104,8 @@ export default {
     },
     searchSelect (path) {
       let vMenu = this.$refs.vMenu
-      let index = document.getElementById(path).dataset.index * 1
-      vMenu.select(index)
-      // vMenu.unfold(index)
-      vMenu.scrollTo(index)
+      vMenu.select(path)
+      vMenu.scrollTo(path)
       this.menuSelect(path)
     }
   }
