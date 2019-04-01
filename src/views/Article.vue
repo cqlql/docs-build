@@ -12,12 +12,22 @@ import marked from 'marked'
 
 export default {
   props: {
-    content: String
+    content: {
+      type: String,
+      default: ''
+    },
+    path: {
+      type: String,
+      default: ''
+    }
   },
   computed: {
     htmlCont () {
-      // return marked(this.content.replace(/\+\+\+([\d\D]+?)\+\+\+/, '```$1```'))
-      return marked(this.content)
+      marked.setOptions({
+        baseUrl: '/docs' + this.path.replace(/[^/\\]+\.md$/, '')
+      })
+      return marked(this.content.replace(/\+\+\+([\d\D]+?)\+\+\+/, '```$1```'))
+      // return marked(this.content)
     }
   },
   created () {

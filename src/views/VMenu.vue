@@ -14,7 +14,8 @@ export default {
     return {
       key: '',
       foldLevel: 1,
-      selectedIndex: -1
+      selectedIndex: -1,
+      selectedId: ''
     }
   },
   watch: {
@@ -135,14 +136,16 @@ export default {
   },
   render () {
     const { menuData, foldLevel, selectedIndex } = this
+    let index = 0
     function build (children = []) {
       const list = []
       children.forEach(item => {
-        let { level, children, name, path, isFile, index } = item
+        let { level, children, name, path, isFile } = item
+        let currIndex = index++
         const childList = build(children)
         list.push(
-          <div class={['menu-item', level < foldLevel ? '' : 'fold', isFile ? 'is-file' : '']} key={index} id={path} data-index={index} data-level={level}>
-            <div class={['item', index === selectedIndex && 'selected']}>
+          <div class={['menu-item', level < foldLevel ? '' : 'fold', isFile ? 'is-file' : '']} key={currIndex} id={path} data-index={currIndex} data-level={level}>
+            <div class={['item', currIndex === selectedIndex && 'selected']}>
               <i class={children.length === 0 ? 'hidden' : ''}></i>
               <span class="txt" domPropsInnerHTML={name}></span>
             </div>
@@ -153,7 +156,7 @@ export default {
       return list
     }
 
-    const menuList = build(menuData.children)
+    const menuList = build(menuData.children, 0)
 
     return (
       <div class="menu" onMousedown={e => { e.preventDefault() }}>

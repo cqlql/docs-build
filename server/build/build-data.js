@@ -16,12 +16,16 @@ class BuildMenuData extends sqlite3 {
     // this.ignore = /\.editorconfig/
     this.ignore = config.ignore
 
+    // 包含文件。目前只包含 md
+    this.includeFile = /\.md$/
+
     // this.data = { children: [] }
   }
 
-  async buildData (add, prevDir = '', children = this.data.children, level = 0) {
+  async buildData (add, prevDir = '', children = this.data.children, level = 0, parentChildren = []) {
     level++
     let names = await fsPromises.readdir(this.docsRootDir + prevDir)
+    let hasfile = false
     for (let i = 0, len = names.length; i < len; i++) {
       let fullName = names[i]
       if (this.ignore && this.ignore.test(fullName)) continue
@@ -29,19 +33,22 @@ class BuildMenuData extends sqlite3 {
       // let url = prevUrl + '/' + encodeURIComponent(fullName)
       let name = fullName.replace(/\.md$/, '')
       let data = {
-        index: this.index++,
         name,
         path: dir,
         level,
         isFile: true,
         children: []
       }
-      children.push(data)
       let filePath = this.docsRootDir + dir
       if (fs.statSync(filePath).isDirectory()) { // 目录情况
         data.isFile = false
-        await this.buildData(add, dir, data.children, level)
+        if (await this.buildData(add, dir, data.children, level, children)) { // 有文件才加入菜单列表
+          children.push(data)
+        }
       } else { // 文件情况
+        if (!this.includeFile.test(filePath)) continue
+        hasfile = true
+        children.push(data)
         let content = await fsPromises.readFile(filePath, 'utf8')
         content = this.clearMarkdown(content) // 清理格式
 
@@ -55,11 +62,11 @@ class BuildMenuData extends sqlite3 {
         }
       }
     }
+    return hasfile
   }
   // 逐次写入逻辑
   async build () {
-    // 清空
-    this.index = 0
+    // 初始值
     this.data = { children: [] }
 
     this.docsIds = new DocsIds()
@@ -92,6 +99,9 @@ class BuildMenuData extends sqlite3 {
       return this.dbRun(`DELETE FROM articles WHERE path=?`, [path])
     })
     await this.dbClose()
+
+    // 清空
+    this.data = null
   }
   clearMarkdown (cont) {
     let tokens = marked.lexer(cont)

@@ -19,7 +19,7 @@
       <VMenu ref="vMenu" :menu-data="menuData" @select="menuSelect" />
     </DragView>
     <div :class="$style.right" :style="{'margin-left':rightX+'px'}">
-      <vArticle ref="vArticle" :content="articleContent" @select="onArticleSelect" />
+      <vArticle ref="vArticle" :content="articleContent" :path="articlePath" @select="onArticleSelect" />
     </div>
   </div>
 </template>
@@ -44,6 +44,7 @@ export default {
       menuList: [],
       articleContent: '',
       articleOutline: {},
+      articlePath: '',
 
       // 窗口大小
       menuWidth: (localStorage.getItem('leftMenuWidth') || 260) * 1,
@@ -77,6 +78,7 @@ export default {
     
     this.menuData = await dataApi.getMenu()
     let path = location.hash.substr(1)
+    this.articlePath = path
     await this.$nextTick()
     if (path) this.searchSelect(decodeURI(path) + '.md')
   },
@@ -97,6 +99,7 @@ export default {
       // path = dataApi.urlPathParamsHandle(path)
       // path = path.replace(/\.md$/, '')
       location.hash = path.replace(/\.md$/, '')
+      this.articlePath = path
       this.articleContent = await dataApi.getArticle(path)
     },
     searchSelect (path) {
