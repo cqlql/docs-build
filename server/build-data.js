@@ -3,7 +3,7 @@ const marked = require('marked')
 const fs = require('fs-extra')
 const sqlite3 = require('./sqlite')
 const fsPromises = fs.promises
-const config = require('../config.js')
+const config = require('./config.js')
 const DocsIds = require('./docs-ids.js')
 
 class BuildMenuData extends sqlite3 {

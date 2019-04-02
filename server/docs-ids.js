@@ -1,5 +1,5 @@
 const crypto = require('crypto')
-const config = require('../config.js')
+const config = require('./config.js')
 const fs = require('fs-extra')
 const fsPromises = fs.promises
 class DocsIds {

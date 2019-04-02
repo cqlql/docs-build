@@ -1,5 +1,5 @@
 const sqlite3 = require('sqlite3')
-const config = require('../config.js')
+const config = require('./config.js')
 const fs = require('fs-extra')
 class Sqlite {
   constructor () {

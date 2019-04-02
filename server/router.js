@@ -30,7 +30,7 @@ router.get('/api/search', async function (req, res) {
 })
 
 router.get('/api/menu', function (req, res) {
-  fs.readFile(path.resolve(__dirname, '../data/menu.json'), 'utf8', function (err, data) {
+  fs.readFile(path.resolve(__dirname, './data/menu.json'), 'utf8', function (err, data) {
     if (err) {
       res.send({
         status: 0,
