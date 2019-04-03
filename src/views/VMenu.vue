@@ -14,14 +14,12 @@ export default {
     return {
       key: '',
       foldLevel: 1,
-      selectedIndex: -1,
       selectedId: ''
     }
   },
   watch: {
     menuData () {
       this.foldLevel = 1
-      this.selectedIndex = -1
       this.eItems = null
     }
   },
@@ -153,7 +151,7 @@ export default {
       return list
     }
 
-    const menuList = build(menuData.children, 0)
+    const menuList = build(menuData.children)
 
     return (
       <div class="menu" onMousedown={e => { e.preventDefault() }}>

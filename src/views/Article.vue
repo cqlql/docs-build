@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import 'highlight.js/styles/xcode.css'
-import DomSelect from './dom-select.js'
+// import 'highlight.js/styles/xcode.css'
+// import DomSelect from './dom-select.js'
 import marked from 'marked'
 
 export default {
@@ -30,10 +30,10 @@ export default {
       // return marked(this.content)
     }
   },
-  created () {
-    this.hxSelect = new DomSelect()
-    this.articleSelect = new DomSelect()
-  },
+  // created () {
+  //   this.hxSelect = new DomSelect()
+  //   this.articleSelect = new DomSelect()
+  // },
   mounted () {
     // 文章定位优化
     this.$el.children[0].style.paddingBottom = innerHeight / 2 + 'px'
