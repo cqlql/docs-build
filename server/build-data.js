@@ -42,7 +42,8 @@ class BuildMenuData extends sqlite3 {
         children: []
       }
       let filePath = this.docsRootDir + dir
-      if (fs.statSync(filePath).isDirectory() && !this.excludeDir.test(filePath)) { // 目录情况
+      if (fs.statSync(filePath).isDirectory()) { // 目录情况
+        if (!this.excludeDir.test(filePath)) continue
         data.isFile = false
         await this.buildData(add, dir, data.children, level, children)
         children.push(data)
