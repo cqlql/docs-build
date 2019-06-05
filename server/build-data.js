@@ -17,7 +17,10 @@ class BuildMenuData extends sqlite3 {
     this.ignore = config.ignore
 
     // 包含文件。目前只包含 md
-    this.includeFile = /\.md$/
+    this.includeFile = /\.md$/i
+
+    // 排除目录
+    this.excludeDir = /images/i
 
     // this.data = { children: [] }
   }
@@ -25,7 +28,6 @@ class BuildMenuData extends sqlite3 {
   async buildData (add, prevDir = '', children = this.data.children, level = 0, parentChildren = []) {
     level++
     let names = await fsPromises.readdir(this.docsRootDir + prevDir)
-    let hasfile = false
     for (let i = 0, len = names.length; i < len; i++) {
       let fullName = names[i]
       if (this.ignore && this.ignore.test(fullName)) continue
@@ -40,14 +42,12 @@ class BuildMenuData extends sqlite3 {
         children: []
       }
       let filePath = this.docsRootDir + dir
-      if (fs.statSync(filePath).isDirectory()) { // 目录情况
+      if (fs.statSync(filePath).isDirectory() && !this.excludeDir.test(filePath)) { // 目录情况
         data.isFile = false
-        if (await this.buildData(add, dir, data.children, level, children)) { // 有文件才加入菜单列表
-          children.push(data)
-        }
+        await this.buildData(add, dir, data.children, level, children)
+        children.push(data)
       } else { // 文件情况
         if (!this.includeFile.test(filePath)) continue
-        hasfile = true
         children.push(data)
         let content = await fsPromises.readFile(filePath, 'utf8')
         content = this.clearMarkdown(content) // 清理格式
@@ -62,7 +62,6 @@ class BuildMenuData extends sqlite3 {
         }
       }
     }
-    return hasfile
   }
   // 逐次写入逻辑
   async build () {
